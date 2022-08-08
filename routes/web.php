@@ -1,6 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,12 +16,33 @@ use Illuminate\Support\Facades\Input;
 Route::get('/', function () {
     return view('welcome');
 });
-
-Route::get('jsCoba', 'jsController@index');
+Route::get('jsOn', 'jsOn@index');
 Route::get('jsProc', function(){
-    $client = Http::get('https::/api.kawalcorona.com/indonesia')->body();
+    $client = Http::withBasicAuth('admin','94k0z4007')->get('http://desktop-qo1l6ph:8080/api/rest/process/procTrain?nim=09031281823049')->json();
 
-    dd($client);
+    //$en = json_encode($client, true);
+
+    /*$change = array(
+        'nama' => 'nama',
+        'nim' => 'nim',
+        'ipk' => 'ipk',
+        'masaStudiBulan' => 'masaStudiBulan',
+        'masaStudiTahun' => 'masaStudiTahun',
+        'fakultas' => 'fakultas',
+        'kemampuanBIng' => 'kemampuanBIng',
+        'pengalamanMagang' => 'pengalamanMagang',
+        'jenisPekerjaanPertama' => 'jenisPekerjaanPertama',
+        'hubStudidgnPekerjaan' => 'hubStudidgnPekerjaan',
+        'ikutOrganisasi' => 'ikutOrganisasi',
+        'prediction(diterimaBulanStlhLulus)' => 'pred'
+        );
+
+        $newArr = array();
+        foreach($client as $key => $client) {
+        $newArr[ $change[0][ $key ] ] = $client;
+        }*/
+
+    return  $client[0]['prediction(diterimaBulanStlhLulus)'];
 });
-Route::get('training', 'TrainingController@index');
-Route::post('training/import_excel', 'TrainingController@import_excel');
+
+Route::resource('mahasiswa', 'MahasiswaController');
